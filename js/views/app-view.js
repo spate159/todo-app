@@ -19,6 +19,7 @@ var app = app || {};
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events: {
+			'click .priority-btn':'togglePriority',
 			'keypress #new-todo': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
 			'click #toggle-all': 'toggleAllComplete'
@@ -33,6 +34,8 @@ var app = app || {};
 			this.$footer = this.$('#footer');
 			this.$main = this.$('#main');
 			this.$list = $('#todo-list');
+			this.$divNewTodo =  this.$('#new-todo-div');
+			this.newHighPriority = false;
 
 			this.listenTo(app.todos, 'add', this.addOne);
 			this.listenTo(app.todos, 'reset', this.addAll);
@@ -73,6 +76,12 @@ var app = app || {};
 			this.allCheckbox.checked = !remaining;
 		},
 
+		// Toggles the prioirty of new todo item.
+		togglePriority: function(){
+			this.newHighPriority = !this.newHighPriority;
+			this.$divNewTodo.toggleClass( 'priority', this.newHighPriority );
+		},
+
 		// Add a single todo item to the list by creating a view for it, and
 		// appending its element to the `<ul>`.
 		addOne: function (todo) {
@@ -99,7 +108,8 @@ var app = app || {};
 			return {
 				title: this.$input.val().trim(),
 				order: app.todos.nextOrder(),
-				completed: false
+				completed: false,
+				priority: this.newHighPriority
 			};
 		},
 

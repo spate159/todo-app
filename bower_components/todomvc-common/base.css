@@ -44,12 +44,13 @@ input[type="checkbox"] {
 	margin: 130px 0 40px 0;
 	border: 1px solid #ccc;
 	position: relative;
-	border-top-left-radius: 2px;
+	border-top-left-radius: 15px;
 	border-top-right-radius: 2px;
 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
 				0 25px 50px 0 rgba(0, 0, 0, 0.15);
 }
 
+/*The red lines*/
 #todoapp:before {
 	content: '';
 	border-left: 1px solid #f5d6d6;
@@ -59,6 +60,7 @@ input[type="checkbox"] {
 	top: 0;
 	left: 40px;
 	height: 100%;
+	z-index: 1;
 }
 
 #todoapp input::-webkit-input-placeholder {
@@ -108,6 +110,38 @@ input[type="checkbox"] {
 	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
 	border-top-left-radius: 1px;
 	border-top-right-radius: 1px;
+}
+
+
+#new-todo-div .priority-btn {
+	display: none;
+	height: auto;
+	position: absolute;
+	top: 16px;
+	left: 34px;
+	padding: 18px 4px;
+	background-color: rgba(255, 255, 255, 0.4);
+	/*color: #d00;*/
+	z-index: 10;
+	/* Mobile Safari */
+	border: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	font-size: 24px;
+}
+
+#new-todo-div:hover .priority-btn {
+	display: block;
+}
+
+#new-todo-div .priority-btn:after {
+	content: '!';
+}
+
+#new-todo-div.priority {
+	color: #d66;
 }
 
 #new-todo,

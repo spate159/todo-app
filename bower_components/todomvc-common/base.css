@@ -324,6 +324,8 @@ label[for='toggle-all'] {
 	color: #d66;
 }
 
+#todo-list li .label-btn,
+#todo-list li .color-btn,
 #todo-list li .destroy,
 #todo-list li .edit-btn {
 	display: none;
@@ -344,6 +346,16 @@ label[for='toggle-all'] {
 	right: 40px;
 }
 
+#todo-list li .color-btn {
+	right: 70px;
+}
+
+#todo-list li .label-btn {
+	right: 100px;
+}
+
+#todo-list li .label-btn:hover,
+#todo-list li .color-btn:hover,
 #todo-list li .destroy:hover,
 #todo-list li .edit-btn:hover {
 	text-shadow: 0 0 1px #000,
@@ -360,6 +372,17 @@ label[for='toggle-all'] {
 	content: '✎';
 }
 
+#todo-list li .color-btn:after {
+	content: '🎨';
+}
+
+#todo-list li .label-btn:after {
+	content: '#';
+}
+
+
+#todo-list li:hover .label-btn,
+#todo-list li:hover .color-btn,
 #todo-list li:hover .destroy,
 #todo-list li:hover .edit-btn {
 	display: block;

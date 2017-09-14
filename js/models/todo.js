@@ -14,7 +14,9 @@ var app = app || {};
 		defaults: {
 			title: '',
 			completed: false,
-			priority: false
+			priority: false,
+			color: '',
+			label:[]
 		},
 
 		// Toggle the `completed` state of this todo item.
@@ -24,10 +26,26 @@ var app = app || {};
 			});
 		},
 
+		// Toggle the `priority` state of this todo item.
 		togglePriority: function(){
 			this.save({
 				priority: !this.get('priority')
 			});
+		},
+
+		// Set color mark for the todo item.
+		setColor: function(newColor){
+			this.save({
+				color: newColor
+			});
+		},
+
+		// add label to the todo item
+		addLabel: function(newLabel){
+			this.save({
+				label: this.label.push(newLabel)
+			});
 		}
+
 	});
 })();

@@ -255,6 +255,7 @@ label[for='toggle-all'] {
 	-ms-appearance: none;
 	-o-appearance: none;
 	appearance: none;
+	z-index: 10;
 }
 
 #todo-list li .priority-btn {
@@ -267,7 +268,7 @@ label[for='toggle-all'] {
 	padding: 0 4px;
 	background-color: #fcfcfc;
 	/*color: #d00;*/
-	z-index: 10;
+
 	/* Mobile Safari */
 	border: none;
 	-webkit-appearance: none;
@@ -291,6 +292,7 @@ label[for='toggle-all'] {
 	font-size: 20px;
 	color: #d9d9d9;
 	text-shadow: 0 -1px 0 #bfbfbf;
+
 }
 
 #todo-list li .toggle:checked:after {
@@ -354,6 +356,32 @@ label[for='toggle-all'] {
 	right: 100px;
 }
 
+#todo-list li div.color-mark {
+	/*display: none;*/
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 40px;
+    height: 58px;
+	/*border: 1px solid #fff;*/
+}
+#todo-list li div.color-pallete {
+    display:none;
+    position:absolute;
+	right: 150px;
+	bottom: 10px;
+	margin: auto 0;
+    border: 1px solid #000;
+    width: 97px;
+    height: 25px;
+	z-index: auto;
+}
+
+#todo-list li:hover .color-pallete.view {
+	display:block;
+}
+
+#todo-list li .color-pallete-color:hover,
 #todo-list li .label-btn:hover,
 #todo-list li .color-btn:hover,
 #todo-list li .destroy:hover,
@@ -384,7 +412,7 @@ label[for='toggle-all'] {
 #todo-list li:hover .label-btn,
 #todo-list li:hover .color-btn,
 #todo-list li:hover .destroy,
-#todo-list li:hover .edit-btn {
+#todo-list li:hover .edit-btn{
 	display: block;
 }
 

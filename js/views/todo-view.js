@@ -19,6 +19,8 @@ var app = app || {};
 		events: {
 			'click .toggle': 'toggleCompleted',
 			'click .priority-btn': 'togglePriority',
+			'click .color-btn': 'openColorPallete',
+			'click .color-pallete-color':'changeColor',
 			'dblclick label': 'edit',
 			'click .edit-btn':'edit',
 			'click .destroy': 'clear',
@@ -55,6 +57,12 @@ var app = app || {};
 			this.$el.toggleClass('priority', this.model.get('priority'));
 			this.toggleVisible();
 			this.$input = this.$('.edit');
+			this.$colorPallete = this.$('.color-pallete');
+			this.$colorMark = this.$('.color-mark');
+
+			// sets the background color on render
+			this.$colorMark.css('background-color', this.model.get('color'));
+
 			return this;
 		},
 
@@ -66,6 +74,22 @@ var app = app || {};
 			return this.model.get('completed') ?
 				app.TodoFilter === 'active' :
 				app.TodoFilter === 'completed';
+		},
+
+		// Change and toggle the color of the marker(div tag) to the clicked color.
+		changeColor: function(e){
+			// console.log(e.currentTarget.style.background);
+			if(this.$colorMark.css('background-color')!==e.currentTarget.style.background){
+				this.model.setColor(e.currentTarget.style.background);
+			}else{
+				this.model.setColor('');
+			}
+		},
+
+		// Set the view class so that csss can display the view with specified colors
+		openColorPallete: function(){
+			this.$colorPallete.toggleClass('view',!this.$colorPallete.hasClass('view'));
+			this.$colorPallete.html(pallete(["#96cdf2","#eea36a","#83ba6d","#d92120"]));
 		},
 
 		// Toggle the `"prioirty"` state of the model.

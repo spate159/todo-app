@@ -109,7 +109,7 @@ var app = app || {};
 				title: this.$input.val().trim(),
 				order: app.todos.nextOrder(),
 				completed: false,
-				priority: this.newHighPriority
+				priority: this.newHighPriority,
 			};
 		},
 

@@ -16,7 +16,8 @@ var app = app || {};
 			completed: false,
 			priority: false,
 			color: '',
-			label:[]
+			label: [],
+			isDeleted: false
 		},
 
 		// Toggle the `completed` state of this todo item.
@@ -44,6 +45,13 @@ var app = app || {};
 		addLabel: function(newLabel){
 			this.save({
 				label: this.label.push(newLabel)
+			});
+		},
+
+		// Toggle the 'deleted' state of this todo item.
+		toggleDeleted: function (){
+			this.save({
+				isDeleted: !this.get('isDeleted')
 			});
 		}
 

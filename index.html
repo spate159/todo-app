@@ -35,13 +35,15 @@
 				<button class="color-btn"></button>
 				<button class="edit-btn"></button>
 				<button class="destroy"></button>
+				<div class="color-pallete">
+					<!-- <span style="background: #332288;width: 20px;height: 20px; display: inline-block"></span>
+					<span style="background: #111111;width: 20px;height: 20px; display: inline-block"></span> -->
+				</div>
 			</div>
-			<div class="color-mark"></div>
-			<div class="color-pallete">
-				<!-- <span style="background: #332288;width: 20px;height: 20px; display: inline-block"></span>
-				<span style="background: #111111;width: 20px;height: 20px; display: inline-block"></span> -->
-			</div>
+			<div class="color-mark" style="background-color:<%- color %>"></div>
+
 			<input class="edit" value="<%- title %>">
+			<input class="add-label" value="<%- label %>" placeholder="Add label">
 		</script>
 		<script type="text/template" id="stats-template">
 			<span id="todo-count"><strong><%= remaining %></strong> <%= remaining === 1 ? 'item' : 'items' %> left</span>
@@ -55,9 +57,15 @@
 				<li>
 					<a href="#/completed">Completed</a>
 				</li>
+				<li>
+					<a href="#/deleted">Deleted</a>
+				</li>
 			</ul>
-			<% if (completed) { %>
+			<% if (completed && app.TodoFilter !== 'deleted') { %>
 			<button id="clear-completed">Clear completed (<%= completed %>)</button>
+			<% } %>
+			<% if (deleted && app.TodoFilter === 'deleted') { %>
+			<button id="clear-deleted">Clear deleted (<%= deleted %>)</button>
 			<% } %>
 		</script>
 		<script src="bower_components/todomvc-common/base.js"></script>

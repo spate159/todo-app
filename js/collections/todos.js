@@ -18,6 +18,7 @@ var app = app || {};
 
 		// Filter down the list of all todo items that are finished.
 		completed: function () {
+			// console.log(this.where({completed: true}));
 			return this.where({completed: true});
 		},
 
@@ -25,6 +26,18 @@ var app = app || {};
 		remaining: function () {
 			return this.where({completed: false});
 		},
+
+		// The filters here only help in getting filtered stats result useful in index.html
+		// Filter down the list to only todo items that are deleted.
+		deleted: function () {
+			return this.where({isDeleted: true});
+		},
+
+		// Filter down the list to only todo items that are not deleted.
+		notDeleted: function () {
+			return this.where({isDeleted: false});
+		},
+
 
 		// We keep the Todos in sequential order, despite being saved by unordered
 		// GUID in the database. This generates the next order number for new items.

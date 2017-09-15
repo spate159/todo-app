@@ -25,6 +25,7 @@ body {
 	background: #eaeaea url('bg.png');
 	color: #4d4d4d;
 	width: 550px;
+	/*550 old*/
 	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
@@ -145,7 +146,7 @@ input[type="checkbox"] {
 }
 
 #new-todo,
-.edit {
+.edit, .add-label {
 	position: relative;
 	margin: 0;
 	width: 100%;
@@ -238,6 +239,15 @@ label[for='toggle-all'] {
 
 #todo-list li.editing .view {
 	display: none;
+}
+
+
+/*TODO from here*/
+#todo-list li.labeling .add-label {
+	display: block;
+	width: 506px;
+	padding: 13px 17px 12px 17px;
+	margin: 0 0 0 43px;
 }
 
 #todo-list li .toggle {
@@ -365,6 +375,7 @@ label[for='toggle-all'] {
     height: 58px;
 	/*border: 1px solid #fff;*/
 }
+
 #todo-list li div.color-pallete {
     display:none;
     position:absolute;
@@ -396,6 +407,10 @@ label[for='toggle-all'] {
 	content: '✖';
 }
 
+#todo-list li.show-delete .destroy:after {
+	content: '↩';
+}
+
 #todo-list li .edit-btn:after {
 	content: '✎';
 }
@@ -416,7 +431,7 @@ label[for='toggle-all'] {
 	display: block;
 }
 
-#todo-list li .edit {
+#todo-list li .edit, li .add-label {
 	display: none;
 }
 
@@ -479,6 +494,19 @@ label[for='toggle-all'] {
 	font-weight: bold;
 }
 
+#clear-deleted {
+	float: right;
+	position: relative;
+	line-height: 20px;
+	text-decoration: none;
+	background: rgba(0, 0, 0, 0.1);
+	font-size: 11px;
+	padding: 0 10px;
+	border-radius: 3px;
+	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+	margin-right: 5px;
+}
+
 #clear-completed {
 	float: right;
 	position: relative;
@@ -535,8 +563,12 @@ label[for='toggle-all'] {
 	}
 }
 
-.hidden {
+.hidden, .deleted {
 	display: none;
+}
+
+li.show-delete{
+	display: block;
 }
 
 hr {

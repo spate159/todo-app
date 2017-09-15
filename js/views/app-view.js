@@ -22,7 +22,8 @@ var app = app || {};
 			'click .priority-btn':'togglePriority',
 			'keypress #new-todo': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
-			'click #toggle-all': 'toggleAllComplete'
+			'click #toggle-all': 'toggleAllComplete',
+			'click #clear-deleted':'clearDeleted'
 		},
 
 		// At initialization we bind to the relevant events on the `Todos`
@@ -42,6 +43,7 @@ var app = app || {};
 			this.listenTo(app.todos, 'change:completed', this.filterOne);
 			this.listenTo(app.todos, 'filter', this.filterAll);
 			this.listenTo(app.todos, 'all', this.render);
+			this.listenTo(app.todos, 'change:isDeleted', this.filterOneDeleted);
 
 			// Suppresses 'add' events with {reset: true} and prevents the app view
 			// from being re-rendered for every model. Only renders when the 'reset'
@@ -54,6 +56,7 @@ var app = app || {};
 		render: function () {
 			var completed = app.todos.completed().length;
 			var remaining = app.todos.remaining().length;
+			var deleted = app.todos.deleted().length;
 
 			if (app.todos.length) {
 				this.$main.show();
@@ -61,7 +64,8 @@ var app = app || {};
 
 				this.$footer.html(this.statsTemplate({
 					completed: completed,
-					remaining: remaining
+					remaining: remaining,
+					deleted: deleted
 				}));
 
 				this.$('#filters li a')
@@ -95,12 +99,22 @@ var app = app || {};
 			app.todos.each(this.addOne, this);
 		},
 
+		filterOneDeleted: function (todo) {
+			todo.trigger('delete');
+		},
+
 		filterOne: function (todo) {
-			todo.trigger('visible');
+			todo.trigger('visible'); // Necessary to work when clicked on completed, active and other buttons
+
 		},
 
 		filterAll: function () {
-			app.todos.each(this.filterOne, this);
+			// app.todos.each(this.filterOne, this);
+			// Changed to accomodate both triggers
+			app.todos.each(function(todo){
+				todo.trigger('visible');
+				todo.trigger('delete');
+			},this);
 		},
 
 		// Generate the attributes for a new Todo item.
@@ -110,6 +124,7 @@ var app = app || {};
 				order: app.todos.nextOrder(),
 				completed: false,
 				priority: this.newHighPriority,
+				deleted: false
 			};
 		},
 
@@ -125,6 +140,12 @@ var app = app || {};
 		// Clear all completed todo items, destroying their models.
 		clearCompleted: function () {
 			_.invoke(app.todos.completed(), 'destroy');
+			return false;
+		},
+
+		// Clear all deleted todo items, destroying their models.
+		clearDeleted: function (){
+			_.invoke(app.todos.deleted(), 'destroy');
 			return false;
 		},
 

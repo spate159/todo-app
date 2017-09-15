@@ -1,6 +1,7 @@
 /*global Backbone, jQuery, _, ENTER_KEY, ESC_KEY */
 var app = app || {};
-
+// modal is passed at runtime here
+// $el refers to this view.
 (function ($) {
 	'use strict';
 
@@ -21,12 +22,17 @@ var app = app || {};
 			'click .priority-btn': 'togglePriority',
 			'click .color-btn': 'openColorPallete',
 			'click .color-pallete-color':'changeColor',
+			'click .label-btn':'labeling',
 			'dblclick label': 'edit',
 			'click .edit-btn':'edit',
-			'click .destroy': 'clear',
+			'click .destroy.deleted': 'clear',
+			'click .destroy': 'toggleDeleted',
 			'keypress .edit': 'updateOnEnter',
+			'keypress .add-label': 'updateLabelOnEnter',
 			'keydown .edit': 'revertOnEscape',
-			'blur .edit': 'close'
+			'keydown .add-label': 'revertOnEscape',
+			'blur .edit': 'close',
+			'blur .add-label': 'closeAddLabel'
 		},
 
 		// The TodoView listens for changes to its model, re-rendering. Since
@@ -37,6 +43,7 @@ var app = app || {};
 			this.listenTo(this.model, 'change', this.render);
 			this.listenTo(this.model, 'destroy', this.remove);
 			this.listenTo(this.model, 'visible', this.toggleVisible);
+			this.listenTo(this.model, 'delete', this.toggleDeleteView);
 		},
 
 		// Re-render the titles of the todo item.
@@ -51,20 +58,23 @@ var app = app || {};
 			if (this.model.changed.id !== undefined) {
 				return;
 			}
-
-			this.$el.html(this.template(this.model.toJSON()));
+			this.$el.html(this.template(this.model.toJSON()));// convert template to view for this model
 			this.$el.toggleClass('completed', this.model.get('completed'));
 			this.$el.toggleClass('priority', this.model.get('priority'));
+
+			// Useful on page refresh. Else triggers are handled by app-view.
 			this.toggleVisible();
+			this.toggleDeleteView();
+
 			this.$input = this.$('.edit');
+			this.$labelInput = this.$('.add-label');
 			this.$colorPallete = this.$('.color-pallete');
 			this.$colorMark = this.$('.color-mark');
 
-			// sets the background color on render
-			this.$colorMark.css('background-color', this.model.get('color'));
-
 			return this;
 		},
+
+
 
 		toggleVisible: function () {
 			this.$el.toggleClass('hidden', this.isHidden());
@@ -76,9 +86,24 @@ var app = app || {};
 				app.TodoFilter === 'completed';
 		},
 
+		toggleDeleteView: function () {
+			this.$el.toggleClass('deleted', this.isDeleted());
+		},
+
+		isDeleted: function () {
+			this.$el.toggleClass('show-delete', app.TodoFilter === 'deleted' && this.model.get('isDeleted'));
+			return this.model.get('isDeleted') ?
+				app.TodoFilter !== 'deleted' :
+				app.TodoFilter === 'deleted';
+		},
+
+		labeling: function (){
+			this.$el.addClass('labeling');
+			this.$labelInput.focus();
+		},
+
 		// Change and toggle the color of the marker(div tag) to the clicked color.
 		changeColor: function(e){
-			// console.log(e.currentTarget.style.background);
 			if(this.$colorMark.css('background-color')!==e.currentTarget.style.background){
 				this.model.setColor(e.currentTarget.style.background);
 			}else{
@@ -102,10 +127,31 @@ var app = app || {};
 			this.model.toggle();
 		},
 
+		// Toggle the `"deleted"` state of the model.
+		toggleDeleted: function(){
+			this.model.toggleDeleted();
+		},
+
 		// Switch this view into `"editing"` mode, displaying the input field.
 		edit: function () {
 			this.$el.addClass('editing');
 			this.$input.focus();
+		},
+
+		// Close the `"labeling"` mode, saving changes to the todo.
+		closeAddLabel: function(){
+			console.log("closeAddLabel");
+			var value = this.$labelInput.val();
+			var trimmedValue = value.trim();
+
+			if (!this.$el.hasClass('labeling')) {
+				return;
+			}
+			if (trimmedValue) {
+				this.model.save({ label: [trimmedValue] });
+				// ommiting the whitespace part
+			}
+			this.$el.removeClass('labeling');
 		},
 
 		// Close the `"editing"` mode, saving changes to the todo.
@@ -124,6 +170,9 @@ var app = app || {};
 			if (trimmedValue) {
 				this.model.save({ title: trimmedValue });
 
+
+				// Problem: if just whitespaces are added while edit than trimmed
+				//version will be saved but not triggered!!! So
 				if (value !== trimmedValue) {
 					// Model values changes consisting of whitespaces only are
 					// not causing change to be triggered Therefore we've to
@@ -139,6 +188,14 @@ var app = app || {};
 			this.$el.removeClass('editing');
 		},
 
+		// If you hit `enter`, we're through adding label to the item.
+		updateLabelOnEnter: function (e) {
+			if (e.which === ENTER_KEY) {
+				this.closeAddLabel();
+			}
+		},
+
+
 		// If you hit `enter`, we're through editing the item.
 		updateOnEnter: function (e) {
 			if (e.which === ENTER_KEY) {
@@ -153,6 +210,9 @@ var app = app || {};
 				this.$el.removeClass('editing');
 				// Also reset the hidden input back to the original value.
 				this.$input.val(this.model.get('title'));
+
+				// also if present
+				this.$el.removeClass('labeling');
 			}
 		},
 

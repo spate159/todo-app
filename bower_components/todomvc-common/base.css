@@ -134,7 +134,8 @@ input[type="checkbox"] {
 }
 
 #new-todo-div:hover .priority-btn {
-	display: block;
+	/*Change when you want to work with priority button while input*/
+	/*display: block;*/
 }
 
 #new-todo-div .priority-btn:after {
@@ -268,16 +269,28 @@ label[for='toggle-all'] {
 	z-index: 10;
 }
 
-#todo-list li .priority-btn {
+#todo-list li div.priority-text {
+	position: absolute;
+	margin-left: 12px;
+	z-index: 11;
+	text-align: center;
+	font-size: 15px;
+	width: 20px;
+	color: #d66;
+	font-weight: bold;
+}
+
+#todo-list li .dropdown.priority  {
+	font-size: 22px;
 	display: none;
 	height: auto;
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 34px;
-	padding: 0 4px;
-	background-color: #fcfcfc;
-	/*color: #d00;*/
+	left: 35px;
+	margin: auto 0;
+	/*background-color: #fcfc00;*/
+	/*color: #d00;
 
 	/* Mobile Safari */
 	border: none;
@@ -285,14 +298,52 @@ label[for='toggle-all'] {
 	-ms-appearance: none;
 	-o-appearance: none;
 	appearance: none;
+	z-index: 10;
 }
 
-#todo-list li:hover .priority-btn {
+#todo-list li:hover .dropdown.priority {
 	display: block;
 }
 
+/*#todo-list li .priority-btn {
+
+}*/
+
+#todo-list li .dropdown.priority .dropdown-content {
+    display: none;
+    position: absolute;
+	top:45px;
+    background-color: #f9f9f9;
+    min-width: 130px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	font-size: 16px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover{
+	background-color: #f1f1f1
+}
+/* Change color of dropdown links on hover */
+.dropdown-content a.selected {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+/*ISSUE .show doesnot work*/
+#todo-list li .dropdown.priority .dropdown-content.show {display:block;}
+
 #todo-list li .priority-btn:after {
+	padding: 0 4px;
 	content: '!';
+	line-height: 60px;
 }
 
 #todo-list li .toggle:after {
@@ -302,7 +353,6 @@ label[for='toggle-all'] {
 	font-size: 20px;
 	color: #d9d9d9;
 	text-shadow: 0 -1px 0 #bfbfbf;
-
 }
 
 #todo-list li .toggle:checked:after {
@@ -332,9 +382,9 @@ label[for='toggle-all'] {
 	color: #d66;
 }
 
-#todo-list li.priority .priority-btn:after {
+/*#todo-list li.priority .priority-btn:after {
 	color: #d66;
-}
+}*/
 
 #todo-list li .label-btn,
 #todo-list li .color-btn,
@@ -367,13 +417,16 @@ label[for='toggle-all'] {
 }
 
 #todo-list li div.color-mark {
-	/*display: none;*/
+	/*Makes this border inside div not outside*/
+	box-sizing: border-box;
 	position:absolute;
 	top: 0;
 	left: 0;
 	width: 40px;
     height: 58px;
-	/*border: 1px solid #fff;*/
+	border-left: 4px;
+	border-color: transparent;
+	border-left-style: outset;
 }
 
 #todo-list li div.color-pallete {
@@ -388,10 +441,11 @@ label[for='toggle-all'] {
 	z-index: auto;
 }
 
-#todo-list li:hover .color-pallete.view {
+#todo-list li:hover .color-pallete.show {
 	display:block;
 }
 
+#todo-list li .priority-btn:hover,
 #todo-list li .color-pallete-color:hover,
 #todo-list li .label-btn:hover,
 #todo-list li .color-btn:hover,

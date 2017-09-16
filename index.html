@@ -29,8 +29,18 @@
 		<script type="text/template" id="item-template">
 			<div class="view">
 				<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
+				<div class="priority-text">
+				<% for (var n = 0; n < priority; ++ n){ %>!<% } %>
+				</div>
 				<label><%- title %></label>
-				<button class="priority-btn"></button>
+				<div class="dropdown priority">
+					<button class="priority-btn"></button>
+					<div class="dropdown-content">
+					    <a class="priority-item <%= priority==='1' ? ' selected' : priority %>" data-priority="1">!</a>
+					    <a class="priority-item <%= priority==='2' ? ' selected' : priority %>" data-priority="2">!!</a>
+					    <a class="priority-item <%= priority==='3' ? ' selected' : priority %>" data-priority="3">!!!</a>
+				  	</div>
+				</div>
 				<button class="label-btn"></button>
 				<button class="color-btn"></button>
 				<button class="edit-btn"></button>
@@ -39,8 +49,9 @@
 					<!-- <span style="background: #332288;width: 20px;height: 20px; display: inline-block"></span>
 					<span style="background: #111111;width: 20px;height: 20px; display: inline-block"></span> -->
 				</div>
+
 			</div>
-			<div class="color-mark" style="background-color:<%- color %>"></div>
+			<div class="color-mark" style="border-color:<%- color %>"></div>
 
 			<input class="edit" value="<%- title %>">
 			<input class="add-label" value="<%- label %>" placeholder="Add label">

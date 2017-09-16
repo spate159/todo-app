@@ -19,7 +19,8 @@ var app = app || {};
 		// The DOM events specific to an item.
 		events: {
 			'click .toggle': 'toggleCompleted',
-			'click .priority-btn': 'togglePriority',
+			'click .priority-btn': 'openPriorityDropdown',
+			'click .priority-item':'setPriority',
 			'click .color-btn': 'openColorPallete',
 			'click .color-pallete-color':'changeColor',
 			'click .label-btn':'labeling',
@@ -32,7 +33,8 @@ var app = app || {};
 			'keydown .edit': 'revertOnEscape',
 			'keydown .add-label': 'revertOnEscape',
 			'blur .edit': 'close',
-			'blur .add-label': 'closeAddLabel'
+			'blur .add-label': 'closeAddLabel',
+			'mouseleave':'closeAllPopups',
 		},
 
 		// The TodoView listens for changes to its model, re-rendering. Since
@@ -59,8 +61,11 @@ var app = app || {};
 				return;
 			}
 			this.$el.html(this.template(this.model.toJSON()));// convert template to view for this model
+
+			// These both are just to set li tag attributes. Other template attributes are set from html
 			this.$el.toggleClass('completed', this.model.get('completed'));
-			this.$el.toggleClass('priority', this.model.get('priority'));
+			this.$el.toggleClass('priority', this.model.get('priority')!==0);
+
 
 			// Useful on page refresh. Else triggers are handled by app-view.
 			this.toggleVisible();
@@ -70,7 +75,7 @@ var app = app || {};
 			this.$labelInput = this.$('.add-label');
 			this.$colorPallete = this.$('.color-pallete');
 			this.$colorMark = this.$('.color-mark');
-
+			this.$priorityDropdown = this.$('.dropdown-content');
 			return this;
 		},
 
@@ -104,22 +109,42 @@ var app = app || {};
 
 		// Change and toggle the color of the marker(div tag) to the clicked color.
 		changeColor: function(e){
-			if(this.$colorMark.css('background-color')!==e.currentTarget.style.background){
+			if(this.$colorMark.css('border-color')!==e.currentTarget.style.background){
 				this.model.setColor(e.currentTarget.style.background);
 			}else{
 				this.model.setColor('');
 			}
 		},
 
+		openPriorityDropdown: function(){
+			this.$priorityDropdown.toggleClass('show', !this.$priorityDropdown.hasClass('show'));
+		},
+
 		// Set the view class so that csss can display the view with specified colors
 		openColorPallete: function(){
-			this.$colorPallete.toggleClass('view',!this.$colorPallete.hasClass('view'));
+			this.$colorPallete.toggleClass('show',!this.$colorPallete.hasClass('show'));
 			this.$colorPallete.html(pallete(["#96cdf2","#eea36a","#83ba6d","#d92120"]));
+		},
+
+		// close the open popups.
+		closeAllPopups:function(){
+			this.$colorPallete.toggleClass('show',false);
+			this.$priorityDropdown.toggleClass('show',false);
 		},
 
 		// Toggle the `"prioirty"` state of the model.
 		togglePriority: function() {
 			this.model.togglePriority();
+		},
+
+		setPriority: function(e){
+			var newPriority = e.currentTarget.dataset.priority;
+			var oldPriority = this.model.get('priority');
+			if(newPriority===oldPriority){
+				this.model.setPriority(0); // toggle to default
+			}else{
+				this.model.setPriority(e.currentTarget.dataset.priority);
+			}
 		},
 
 		// Toggle the `"completed"` state of the model.
@@ -140,7 +165,7 @@ var app = app || {};
 
 		// Close the `"labeling"` mode, saving changes to the todo.
 		closeAddLabel: function(){
-			console.log("closeAddLabel");
+			// console.log("closeAddLabel");
 			var value = this.$labelInput.val();
 			var trimmedValue = value.trim();
 

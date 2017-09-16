@@ -19,7 +19,7 @@ var app = app || {};
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events: {
-			'click .priority-btn':'togglePriority',
+			// 'click .priority-btn':'togglePriority',
 			'keypress #new-todo': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
 			'click #toggle-all': 'toggleAllComplete',
@@ -83,7 +83,7 @@ var app = app || {};
 		// Toggles the prioirty of new todo item.
 		togglePriority: function(){
 			this.newHighPriority = !this.newHighPriority;
-			this.$divNewTodo.toggleClass( 'priority', this.newHighPriority );
+			//this.$divNewTodo.toggleClass( 'priority', this.newHighPriority ); // could be implemented in html
 		},
 
 		// Add a single todo item to the list by creating a view for it, and
@@ -105,7 +105,6 @@ var app = app || {};
 
 		filterOne: function (todo) {
 			todo.trigger('visible'); // Necessary to work when clicked on completed, active and other buttons
-
 		},
 
 		filterAll: function () {

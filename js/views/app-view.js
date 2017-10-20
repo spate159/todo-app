@@ -36,7 +36,7 @@ var app = app || {};
 			this.$main = this.$('#main');
 			this.$list = $('#todo-list');
 			this.$divNewTodo =  this.$('#new-todo-div');
-			this.newHighPriority = false;
+			this.initPriority = 0;
 
 			this.listenTo(app.todos, 'add', this.addOne);
 			this.listenTo(app.todos, 'reset', this.addAll);
@@ -80,7 +80,7 @@ var app = app || {};
 			this.allCheckbox.checked = !remaining;
 		},
 
-		// Toggles the prioirty of new todo item.
+		// Toggles the prioirty of new todo item. Currently unused
 		togglePriority: function(){
 			this.newHighPriority = !this.newHighPriority;
 			//this.$divNewTodo.toggleClass( 'priority', this.newHighPriority ); // could be implemented in html
@@ -122,7 +122,7 @@ var app = app || {};
 				title: this.$input.val().trim(),
 				order: app.todos.nextOrder(),
 				completed: false,
-				priority: this.newHighPriority,
+				priority: 0,
 				deleted: false
 			};
 		},
